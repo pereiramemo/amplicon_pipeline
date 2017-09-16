@@ -2,18 +2,14 @@
 ## 1- define variables
 ###############################################################################
 
-WORKSPACE="/bioinf/home/epereira/workspace/pipeline_comparison/"
-
-CONFIG="${WORKSPACE}"/scripts/config
-source "${CONFIG}"
+RUN_DIR="$(dirname "$(readlink -f "$0")")"
+source "${RUN_DIR}"/config
 
 
-SAMPLE_NUM=$1
-# SAMPLE_NUM=8
-R1="${WORKSPACE}/Cecilia/3363Raw/3363-${SAMPLE_NUM}-MS28F_R1.fastq"
-R2="${WORKSPACE}/Cecilia/3363Raw/3363-${SAMPLE_NUM}-MS28F_R2.fastq"
+R1="${1}"
+R2="${2}"
+OUTDUR="${3}"
 
-OUTDIR="${WORKSPACE}/preprocessed_data_local/sample_${SAMPLE_NUM}"
 mkdir "${OUTDIR}"
 
 if [[ $? != 0 ]]; then

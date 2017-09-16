@@ -2,17 +2,14 @@
 ## define variables
 ###############################################################################
 
-WORKSPACE="/bioinf/home/epereira/workspace/pipeline_comparison/"
 
-CONFIG="${WORKSPACE}"/scripts/config
-source "${CONFIG}"
+RUN_DIR="$(dirname "$(readlink -f "$0")")"
+source "${RUN_DIR}"/config
 
 INPUT=${1}
 OUTPUT_DIR=${2}
 NSLOTS=${3}
 SIZEIN=${4}
-
-# INPUT="${LAGUNAS}/tests/test.fastq"
 
 ID99="0.99"
 ID97="0.97"
