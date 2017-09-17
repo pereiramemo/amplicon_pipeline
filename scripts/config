@@ -6,14 +6,13 @@ NSLOTS="8"
 #############################
 ## folders
 #############################
-
-### COMP should be set 
-COMP="path to cloned 16S_analysis_pipeline"
+### COMP should be set as path to cloned 16S_analysis_pipeline
+COMP="/bioinf/home/epereira/workspace/pipeline_comparison/\
+16S_analysis_pipelines/"
 
 RESOURCES="${COMP}/resources"
 
-
-## SOFTWARE_DIR should be set 
+## SOFTWARE_DIR should be set as path to software dir
 SOFTWARE_DIR="/bioinf/software/"
 
 #############################

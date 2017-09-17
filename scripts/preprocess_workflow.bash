@@ -8,12 +8,12 @@ source "${RUN_DIR}"/config
 
 R1="${1}"
 R2="${2}"
-OUTDUR="${3}"
+OUTDIR="${3}"
 
 mkdir "${OUTDIR}"
 
 if [[ $? != 0 ]]; then
-  echo "mkdir ${OUTDIR}"
+  echo "mkdir ${OUTDIR} failed"
   exit 1
 fi
 
