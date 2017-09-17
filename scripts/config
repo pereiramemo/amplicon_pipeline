@@ -52,6 +52,8 @@ filterbyname.sh"
 blast_version="2.6.0+"
 makeblastdb="${SOFTWARE_DIR}/blast+/ncbi-blast-${blast_version}/bin/makeblastdb"
 blastn="${SOFTWARE_DIR}/blast+/ncbi-blast-${blast_version}/bin/blastn"
+blastdbcmd="${SOFTWARE_DIR}/blast+/ncbi-blast-${blast_version}/bin/blastdbcmd"
+
 
 #######M######################
 ## functions

@@ -2,7 +2,6 @@
 ## define variables
 ###############################################################################
 
-
 RUN_DIR="$(dirname "$(readlink -f "$0")")"
 source "${RUN_DIR}"/config
 

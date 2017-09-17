@@ -28,7 +28,7 @@ fi
 "${blastn}" \
 -db "${DB}" \
 -query "${INPUT}" \
--outfmt '6 std qlen' \
+-outfmt '6 std qlen stitle' \
 -perc_identity 75 \
 -max_target_seqs 1 \
 -evalue 0.0001 \

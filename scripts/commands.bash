@@ -11,12 +11,12 @@ BIN="${WORKSPACE}/16S_analysis_pipelines/scripts/"
 export BIN
 export WORKSPACE
 
-SAMPLES=$( ls "${WORKSPACE}"/Cecilia/3363Raw/* | \
-           sed "s/_R[1,2].fastq//" | sort | uniq  | head )
-
 ###############################################################################
 ## 2 - run preprocess
 ###############################################################################
+
+SAMPLES=$( ls "${WORKSPACE}"/Cecilia/3363Raw/* | \
+           sed "s/_R[1,2].fastq//" | sort | uniq  | head )
 
 parallel \
 --xapply \
@@ -31,13 +31,14 @@ ${WORKSPACE}/16S_analysis_pipelines/preprocess_data/{2}" \
 ###############################################################################
 
 ALL_FASTA="${WORKSPACE}/16S_analysis_pipelines/preprocess_data/\
-all_samples_prepro.fna"
+all_samples_prepro.fna2"
 
 ls "${WORKSPACE}/16S_analysis_pipelines/preprocess_data/"*/*.fasta | \
 while read LINE; do
 
-  SAMPLE=$( basename "${LINE}" _all_qc_derep_cc.fasta | sed "s/sample_//");
-  sed "s/^>/${SAMPLE}/" "${LINE}"
+  SAMPLE=$( basename "${LINE}" _all_qc_derep_cc.fasta | \
+  sed "s/sample_3363-//");
+  sed "s/^>/>${SAMPLE}-/" "${LINE}"
 
 done > "${ALL_FASTA}"
 
@@ -46,25 +47,45 @@ done > "${ALL_FASTA}"
 ###############################################################################
 
 OUTPUT_DIR="${WORKSPACE}/16S_analysis_pipelines/results/"
-
-"${BIN}/vsearch_workflow.bash"
+bash "${BIN}/vsearch_workflow.bash" \
 "${ALL_FASTA}" \
-"${OUPUT_DIR}" \
+"${OUTPUT_DIR}" \
 24 \
-seizein
+sizein
 
 ###############################################################################
 ## 5 - annotated centroids
 ###############################################################################
 
 BLOUT="${WORKSPACE}/16S_analysis_pipelines/results/taxa_annot.blout"
-CENTROIDS_FASTA="${WORKSPACE}/16S_analysis_pipelines/results/"
+CENTROIDS_FASTA="${WORKSPACE}/16S_analysis_pipelines/results/\
+derep97_vsearch_out.fasta"
 
-"${BIN}/taxa_annotation_wblast.bash"
+bash "${BIN}/taxa_annotation_wblast.bash" \
 "${CENTROIDS_FASTA}" \
 "${BLOUT}" \
-24
+60
 
 ###############################################################################
 ## 6 - cross tables
 ###############################################################################
+
+OTU_TABLE="${WORKSPACE}/16S_analysis_pipelines/results/\
+derep97_vsearch_out.clust.tbl"
+
+OTU_TABLE_ANNOT="${OTU_TABLE/.tbl/_annot.tbl}"
+
+awk 'BEGIN {FS="\t"; OFS="\t" }; {
+  if ( NR == FNR ) {
+    array_otu[$1]=$14
+    next; }
+
+  if (FNR ==  1) {
+    print $0,"taxa";
+  }
+
+  if ( array_otu[$1] ) {
+    print $0,array_otu[$1]
+  }
+}' "${BLOUT}" "${OTU_TABLE}" > "${OTU_TABLE_ANNOT}"
+
