@@ -9,5 +9,7 @@ It additionally provides the scripts to glue the outputs of these pipelines.
 3. [bbduk](https://sourceforge.net/projects/bbmap/)
 4. [blast](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
 
+Once these tools are installed, the paths to the executables have to be added to the scripts/config file.
+
 
 
