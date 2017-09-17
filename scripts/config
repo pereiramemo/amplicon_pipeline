@@ -47,17 +47,6 @@ filterbyname="${SOFTWARE_DIR}/bbmap/bbmap-${filterbyname_version}/\
 filterbyname.sh"
 
 #############################
-## mafft
-#############################
-mafft_version="7.221"
-mafft="${SOFTWARE_DIR}/mafft/mafft-${mafft_versino}/bin/mafft"
-
-#############################
-## usearch
-#############################
-usearch="/bioinf/home/epereira/bin/usearch10.0.240_i86linux32"
-
-#############################
 ## blast
 #############################
 blast_version="2.6.0+"
