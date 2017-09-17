@@ -17,6 +17,8 @@ if [[ $? != 0 ]]; then
   exit 1
 fi
 
+SAMPLE_NAME=$( basename "${OUTDIR}" )
+
 ###############################################################################
 ## 2 - merge with pear
 ###############################################################################
@@ -24,7 +26,7 @@ fi
 "${pear}" \
 -f "${R1}" \
 -r "${R2}" \
--o "${OUTDIR}"/sample_"${SAMPLE_NUM}" \
+-o "${OUTDIR}/sample_${SAMPLE_NAME}" \
 -j "${NSLOTS}"
 
 if [[ $? != 0 ]]; then
@@ -32,10 +34,10 @@ if [[ $? != 0 ]]; then
   exit 1
 fi
 
-MERGED="${OUTDIR}/sample_${SAMPLE_NUM}.assembled.fastq"
-UNMERGED_FORWARD="${OUTDIR}/sample_${SAMPLE_NUM}.unassembled.forward.fastq"
-UNMERGED_REVERSE="${OUTDIR}/sample_${SAMPLE_NUM}.unassembled.reverse.fastq"
-DISCARDED="${OUTDIR}/sample_${SAMPLE_NUM}.discarded.fastq"
+MERGED="${OUTDIR}/sample_${SAMPLE_NAME}.assembled.fastq"
+UNMERGED_FORWARD="${OUTDIR}/sample_${SAMPLE_NAME}.unassembled.forward.fastq"
+UNMERGED_REVERSE="${OUTDIR}/sample_${SAMPLE_NAME}.unassembled.reverse.fastq"
+DISCARDED="${OUTDIR}/sample_${SAMPLE_NAME}.discarded.fastq"
 
 ###############################################################################
 ## 3 - quality trimming 
@@ -80,7 +82,7 @@ fi
 ## 4 - concat all 
 ###############################################################################
 
-CONCAT_QC="${OUTDIR}/sample_${SAMPLE_NUM}_all_qc.fastq"
+CONCAT_QC="${OUTDIR}/sample_${SAMPLE_NAME}_all_qc.fastq"
 
 cat \
 "${MERGED_QC}" \
