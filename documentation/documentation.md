@@ -15,7 +15,7 @@ It consists of the following tasks:
 ## Clustering
 We applied two different approaches, one using [cd-hit](http://weizhongli-lab.org/cd-hit/) and the other [swarm](https://github.com/torognes/swarm).  
 The scripts for these are `cd-hit_workflow.bash` and `swarm_workflow.bash`. Both scripts mainly consist of applying the clustering tool on the pre-processed fasta.
-Swarm approach includes a dereprlication with vsearch, where the abundance of each read is added as a _[INT] at the end of the sequence id.
+`swarm_workflow.bash` includes a dereprlication step with vsearch, where the abundance of each read is added as _[INT] at the end of the sequence id.
 
 
 
