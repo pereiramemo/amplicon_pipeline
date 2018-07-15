@@ -9,7 +9,7 @@ The workflow consists of the following tasks.
 4) Convert fastq to fasta
 5) Dereplicate with [vsearch](https://github.com/torognes/vsearch): we remove all unique reads (--minuniquesize 1).
 6) Check for chimeras with [vsearch](https://github.com/torognes/vsearch). We use a min abundance ratio of parent vs chimera of 1.5 (--abskew  1.5) and the fasta is one line per sequence (--fasta_width 0)
-
+7) Count sequences and clean intermediary files.
 
 
 
