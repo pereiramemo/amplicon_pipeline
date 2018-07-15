@@ -2,10 +2,13 @@
 ## 0 - define variables
 ###############################################################################
 
-RUN_DIR="$(dirname "$(readlink -f "$0")")"
-source "${RUN_DIR}"/config
+WORKSPACE="/bioinf/home/epereira/workspace/16S_analyses/lagunas_16S_analysis/"
 
-INPUT="${1}"
+CONFIG="${WORKSPACE}"/scripts/config
+source "${CONFIG}"
+
+INPUT="${WORKSPACE}/filtered_data/all_samples.fasta"
+# INPUT="${LAGUNAS}/tests/test.fastq"
 
 OUTPUT_DIR=${RESULTS}/cd-hit_based
 ID99="0.99"
@@ -31,11 +34,8 @@ if [[ $? -ne "0" ]]; then
 # exit
 fi
 
-"${MODULES}"/cd-hit_clstr_parser.awk "${DEREP_ID99_READS}".clstr \
-> "${OUTPUT_DIR}"/id"${ID99/0./}"_abund.tbl
-
 ##############################################################################
-## OUTs clustering: id 97
+## 2 - OUTs clustering: id 97
 ##############################################################################
 
 "${cd_hit_est}" \
@@ -52,6 +52,13 @@ if [[ $? -ne "0" ]]; then
 #  exit
 fi
 
+##############################################################################
+## 3 - make abundance tables
+##############################################################################
 
-"${MODULES}"/cd-hit_clstr_parser.awk "${DEREP_ID97_READS}".clstr \
+"${MODULES}"/clstr_parser.awk "${DEREP_ID99_READS}".clstr \
+> "${OUTPUT_DIR}"/id"${ID99/0./}"_abund.tbl
+
+
+"${MODULES}"/clstr_parser.awk "${DEREP_ID97_READS}".clstr \
 > "${OUTPUT_DIR}"/id"${ID97/0./}"_abund.tbl

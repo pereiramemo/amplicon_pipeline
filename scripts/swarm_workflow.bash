@@ -2,15 +2,21 @@
 ## 0 - define variables
 ###############################################################################
 
-RUN_DIR="$(dirname "$(readlink -f "$0")")"
-source "${RUN_DIR}"/config
+WORKSPACE="/bioinf/home/epereira/workspace/16S_analyses/lagunas_16S_analysis/"
 
-INPUT="${1}"
+CONFIG="${WORKSPACE}"/scripts/config
+source "${CONFIG}"
+
+INPUT="${WORKSPACE}/filtered_data/all_samples.fasta"
+
 TMP_FASTA1="$(mktemp)".fasta
-FINAL_FASTA="${INPUT/.fasta/_final.fasta}"
+FINAL_FASTA="${WORKSPACE}/results/swarm_based/all_samples_final.fasta"
 
-OUTPUT=$( basename "${INPUT}" .fasta)
-OUTDIR=$( dirname "${INPUT}")
+# INPUT="/bioinf/home/epereira/workspace/lagunas_16S_analysis/results/\
+# swarm_based/tmp.fasta"
+
+OUTPUT=$( basename "${INPUT}" .fasta )
+OUTDIR=$( dirname "${INPUT}" )
 
 ##############################################
 ## 1 - derep and format
@@ -41,7 +47,7 @@ rm "${TMP_FASTA1}"
 ## 2 - run swarm
 ##############################################
 
-swarm \
+"${swarm}" \
   --differences 1 \
   --fastidious \
   --threads ${NSLOTS} \
@@ -56,12 +62,12 @@ swarm \
 ## 3 - make abundance table
 ##############################################
 
-uclust \
+"${uclust}" \
   --uc2clstr ${FINAL_FASTA/.fasta/.uclust} \
   --output ${FINAL_FASTA/.fasta/.clstr}
 
 
-"${MODULES}"/cd-hit_clstr_parser.awk \
+"${MODULES}"/clstr_parser.awk \
 ${FINAL_FASTA/.fasta/.clstr} > \
 ${FINAL_FASTA/.fasta/_abund.tbl}
 
