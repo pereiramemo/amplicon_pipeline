@@ -1,7 +1,7 @@
 # Documentation
 
 ## Pre-processing
-The pre-processing script is 'preprocess_workflow.bash'.
+The pre-processing script is `preprocess_workflow.bash`.
 The workflow consists of the following tasks.
 1) Merge pair-end reads with [pear](https://sco.h-its.org/exelixis/web/software/pear/doc.html) (default parameters).
 2) Quality trim with [bbduk](https://sourceforge.net/projects/bbmap/). We trim bases of merged and unmerged reads with a quality lower than 25 (trimq=25) from both ends (qtrim=rl), and discard reads shorter than 100bp (minlength=100).
