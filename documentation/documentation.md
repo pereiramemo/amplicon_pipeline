@@ -13,7 +13,7 @@ It consists of the following tasks:
 
 
 ## Clustering
-We applied two approaches [cd-hit(http://weizhongli-lab.org/cd-hit/) and [swarm](https://github.com/torognes/swarm).
+We applied two approaches [cd-hit](http://weizhongli-lab.org/cd-hit/) and [swarm](https://github.com/torognes/swarm).
 The scripts for these are cd-hit_workflow.bash and swarm_workflow.bash.
 
 
