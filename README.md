@@ -1,6 +1,6 @@
 # 16S_analysis_pipelines
 ## Intro
-This repo includes the preprocessing, clustering and annotation pipelines in the scripts folder. 
+This repo includes pipelines for the preprocessing, clustering and annotation of 16S sequence data. 
 It additionally provides the scripts to glue the outputs of these pipelines.
 
 ## Requisites 
