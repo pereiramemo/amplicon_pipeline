@@ -12,6 +12,8 @@ It consists of the following tasks:
 7. Count sequences and clean intermediate files.
 
 
+## Clustering
+We applied two approaches [cd-hit[http://weizhongli-lab.org/cd-hit/) and [swarm](https://github.com/torognes/swarm).
 
 
 
