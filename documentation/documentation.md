@@ -13,10 +13,8 @@ It consists of the following tasks:
 
 
 ## Clustering
-We applied two different approaches, one using [cd-hit](http://weizhongli-lab.org/cd-hit/) and the other [swarm](https://github.com/torognes/swarm).  
-The scripts for these are `cd-hit_workflow.bash` and `swarm_workflow.bash`.
-Both scripts bascally consist of applying the clustering tool on the pre-preocessed fasta.
-
+We applied two different approaches, one using [cd-hit](http://weizhongli-lab.org/cd-hit/) and the other [swarm](https://github.com/torognes/swarm).
+The scripts for these are `cd-hit_workflow.bash` and `swarm_workflow.bash`. Both scripts mainly consist of applying the clustering tool on the pre-processed fasta.
 
 
 
