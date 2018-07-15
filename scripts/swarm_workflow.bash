@@ -2,12 +2,10 @@
 ## 0 - define variables
 ###############################################################################
 
-WORKSPACE="/bioinf/home/epereira/workspace/16S_analyses/lagunas_16S_analysis/"
+RUN_DIR="$(dirname "$(readlink -f "$0")")"
+source "${RUN_DIR}"/config
 
-CONFIG="${WORKSPACE}"/scripts/config
-source "${CONFIG}"
-
-INPUT="${WORKSPACE}/filtered_data/all_samples.fasta"
+INPUT="${1}"
 
 TMP_FASTA1="$(mktemp)".fasta
 FINAL_FASTA="${WORKSPACE}/results/swarm_based/all_samples_final.fasta"
