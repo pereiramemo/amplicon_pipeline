@@ -1,5 +1,5 @@
 ###############################################################################
-## 1- define variables
+## 0 - define variables
 ###############################################################################
 
 RUN_DIR="$(dirname "$(readlink -f "$0")")"
@@ -20,7 +20,7 @@ fi
 SAMPLE_NAME=$( basename "${OUTDIR}" )
 
 ###############################################################################
-## 2 - merge with pear
+## 1 - merge with pear
 ###############################################################################
 
 "${pear}" \
@@ -40,7 +40,7 @@ UNMERGED_REVERSE="${OUTDIR}/sample_${SAMPLE_NAME}.unassembled.reverse.fastq"
 DISCARDED="${OUTDIR}/sample_${SAMPLE_NAME}.discarded.fastq"
 
 ###############################################################################
-## 3 - quality trimming 
+## 2 - quality trimming
 ###############################################################################
 
 # merged
@@ -52,7 +52,7 @@ out="${MERGED_QC}" \
 qtrim=rl \
 minlength=100 \
 overwrite=true \
-trimq=25
+trimq=20
 
 if [[ $? != 0 ]]; then
   echo "quality check 1 with ${bbduk} failed"
@@ -71,7 +71,7 @@ out2="${UNMERGED_REVERSE_QC}" \
 qtrim=rl \
 minlength=100 \
 overwrite=true \
-trimq=25
+trimq=20
 
 if [[ $? != 0 ]]; then
   echo "quality check 2 with ${bbduk} failed"
@@ -79,7 +79,7 @@ if [[ $? != 0 ]]; then
 fi
 
 ###############################################################################
-## 4 - concat all 
+## 3 - concat all
 ###############################################################################
 
 CONCAT_QC="${OUTDIR}/sample_${SAMPLE_NAME}_all_qc.fastq"
@@ -95,7 +95,7 @@ if [[ $? != 0 ]]; then
 fi
 
 ###############################################################################
-## 5 - convert to fasta
+## 4 - convert to fasta
 ###############################################################################
 
 CONCAT_QC_FASTA="${CONCAT_QC/.fastq/.fasta}"
@@ -113,7 +113,7 @@ fi
 
 
 ###############################################################################
-## 6 - dereplication
+## 5 - dereplication
 ###############################################################################
 
 CONCAT_QC_DEREP="${CONCAT_QC_FASTA/_qc.fasta/_qc_derep.fasta}"
@@ -130,7 +130,7 @@ if [[ $? != 0 ]]; then
 fi
 
 ###############################################################################
-## 7 - chimera check
+## 6 - chimera check
 ###############################################################################
 
 CONCAT_QC_DEREP_CC="${CONCAT_QC_DEREP/.fasta/_cc.fasta}"
@@ -147,7 +147,7 @@ if [[ $? != 0 ]]; then
 fi
 
 ###############################################################################
-## 8 - count sequences and clean
+## 7 - count sequences and clean
 ###############################################################################
 
 FILES_FASTQ="${MERGED},${UNMERGED_FORWARD},${UNMERGED_REVERSE},${MERGED_QC},\
@@ -161,8 +161,11 @@ for F in $( echo "${FILES_FASTQ}" ); do
   NAME=$(basename "${F}")
   N=$( count_fastq "${F}" )
 
-  echo -e "${NAME}\t${N}" >> "${COUNTS}"
-  rm "${F}"
+  L=$( infoseq "${F}" | awk ' NR > 1 { sum = sum + $6 } END { print sum }' )
+  A=$( echo  "${L}" / "${N}" | bc -l )
+
+  echo -e "${NAME}\t${N}\t${A}" >> "${COUNTS}"
+  ls "${F}"
 
 done
 
@@ -178,7 +181,9 @@ for F in $( echo "${FILES_FASTA}" ); do
   NAME=$(basename "${F}")
   N=$( count_fasta "${F}" )
 
-  echo -e "${NAME}\t${N}" >> "${COUNTS}"
+  L=$( infoseq "${F}" | awk ' NR > 1 { sum = sum + $6 } END { print sum }' )
+  A=$( echo "${L}" / "${N}" | bc -l )
+  echo -e "${NAME}\t${N}\t${A}" >> "${COUNTS}"
 
 done
 
@@ -186,8 +191,8 @@ if [[ $? != 0 ]]; then
   echo "seq counts fasta failed"
   exit 1
 fi
-rm "${CONCAT_QC_FASTA}" \
-   "${CONCAT_QC_DEREP}" \
-   "${DISCARDED}" 
+#rm "${CONCAT_QC_FASTA}" \
+#   "${CONCAT_QC_DEREP}" \
+#   "${DISCARDED}"
 
 
