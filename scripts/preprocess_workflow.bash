@@ -8,6 +8,12 @@ source "${RUN_DIR}"/config
 R1="${1}"
 R2="${2}"
 OUTDIR="${3}"
+NSLOTS="${4}"
+
+# R1="${DATA}"/amp_size_248/3_S3_L001_R1_001.fastq
+# R2="${DATA}"/amp_size_248/3_S3_L001_R2_001.fastq
+# OUTDIR="${RESULTS}"/test
+
 
 mkdir "${OUTDIR}"
 
@@ -51,7 +57,9 @@ out="${MERGED_QC}" \
 qtrim=rl \
 minlength=100 \
 overwrite=true \
-trimq=20
+trimq=20 \
+threads="${NSLOTS}"
+
 
 if [[ $? != 0 ]]; then
   echo "quality check 1 with ${bbduk} failed"
@@ -70,7 +78,8 @@ out2="${UNMERGED_REVERSE_QC}" \
 qtrim=rl \
 minlength=100 \
 overwrite=true \
-trimq=20
+trimq=20 \
+threads="${NSLOTS}"
 
 if [[ $? != 0 ]]; then
   echo "quality check 2 with ${bbduk} failed"
@@ -110,18 +119,18 @@ if [[ $? != 0 ]]; then
   exit 1
 fi
 
-
 ###############################################################################
 ## 5 - dereplication
 ###############################################################################
 
-CONCAT_QC_DEREP="${CONCAT_QC_FASTA/_qc.fasta/_qc_derep.fasta}"
+CONCAT_QC_DEREP_FASTA="${CONCAT_QC_FASTA/_qc.fasta/_qc_derep.fasta}"
 
 "${vsearch}" \
 --derep_prefix "${CONCAT_QC_FASTA}" \
---output "${CONCAT_QC_DEREP}" \
+--output "${CONCAT_QC_DEREP_FASTA}" \
 --minuniquesize 1 \
---sizeout
+--sizeout \
+--threads "${NSLOTS}"
 
 if [[ $? != 0 ]]; then
   echo "dereplication ${vsearch} failed"
@@ -132,13 +141,14 @@ fi
 ## 6 - chimera check
 ###############################################################################
 
-CONCAT_QC_DEREP_CC="${CONCAT_QC_DEREP/.fasta/_cc.fasta}"
+CONCAT_QC_DEREP_CC_FASTA="${CONCAT_QC_DEREP_FASTA/.fasta/_cc.fasta}"
 
 "${vsearch}" \
---uchime_denovo "${CONCAT_QC_DEREP}" \
---nonchimeras "${CONCAT_QC_DEREP_CC}" \
+--uchime_denovo "${CONCAT_QC_DEREP_FASTA}" \
+--nonchimeras "${CONCAT_QC_DEREP_CC_FASTA}" \
 --fasta_width 0 \
---abskew 1.5
+--abskew 2 \
+--threads "${NSLOTS}"
 
 if [[ $? != 0 ]]; then
   echo "chimera check ${vsearch} failed"
@@ -146,7 +156,7 @@ if [[ $? != 0 ]]; then
 fi
 
 ###############################################################################
-## 7 - count sequences and clean
+## 7 - count sequence number and length
 ###############################################################################
 
 FILES_FASTQ="${R1},${R2},${MERGED},${UNMERGED_FORWARD},${UNMERGED_REVERSE},${MERGED_QC},\
@@ -174,7 +184,7 @@ if [[ $? != 0 ]]; then
   exit 1
 fi
 
-FILES_FASTA="${CONCAT_QC_FASTA},${CONCAT_QC_DEREP},${CONCAT_QC_DEREP_CC}"
+FILES_FASTA="${CONCAT_QC_FASTA},${CONCAT_QC_DEREP_FASTA},${CONCAT_QC_DEREP_CC_FASTA}"
 
 for F in $( echo "${FILES_FASTA}" ); do
 
@@ -191,8 +201,31 @@ if [[ $? != 0 ]]; then
   echo "seq counts fasta failed"
   exit 1
 fi
-#rm "${CONCAT_QC_FASTA}" \
-#   "${CONCAT_QC_DEREP}" \
-#   "${DISCARDED}"
 
 
+###############################################################################
+## 8 - get stats
+###############################################################################
+
+"${vsearch}" \
+--fastq_stats "${R1}" \
+--threads "${NSLOTS}" \
+--log COUNTS="${OUTDIR}"/sample_${SAMPLE_NAME}_R1_stats.tbl
+
+"${vsearch}" \
+--fastq_stats "${R2}" \
+--threads "${NSLOTS}" \
+--log COUNTS="${OUTDIR}"/sample_${SAMPLE_NAME}_R2_stats.tbl
+
+###############################################################################
+## 9 - clean
+###############################################################################
+
+rm "${DISCARDED}" \
+   "${MERGED}" \
+   "${MERGED_QC}" \
+   "${UNMERGED_FORWARD}" \
+   "${UNMERGED_REVERSE}" \
+   "${UNMERGED_FORWARD_QC}" \
+   "${UNMERGED_REVERSE_QC}" \
+   "${CONCAT_QC_FASTA}"
