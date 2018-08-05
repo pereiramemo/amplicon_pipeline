@@ -210,12 +210,12 @@ fi
 "${vsearch}" \
 --fastq_stats "${R1}" \
 --threads "${NSLOTS}" \
---log COUNTS="${OUTDIR}"/sample_${SAMPLE_NAME}_R1_stats.tbl
+--log "${OUTDIR}"/sample_${SAMPLE_NAME}_R1_stats.tbl
 
 "${vsearch}" \
 --fastq_stats "${R2}" \
 --threads "${NSLOTS}" \
---log COUNTS="${OUTDIR}"/sample_${SAMPLE_NAME}_R2_stats.tbl
+--log "${OUTDIR}"/sample_${SAMPLE_NAME}_R2_stats.tbl
 
 ###############################################################################
 ## 9 - clean
