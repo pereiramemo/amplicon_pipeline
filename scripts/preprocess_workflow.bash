@@ -5,7 +5,6 @@
 RUN_DIR="$(dirname "$(readlink -f "$0")")"
 source "${RUN_DIR}"/config
 
-
 R1="${1}"
 R2="${2}"
 OUTDIR="${3}"
@@ -150,12 +149,14 @@ fi
 ## 7 - count sequences and clean
 ###############################################################################
 
-FILES_FASTQ="${MERGED},${UNMERGED_FORWARD},${UNMERGED_REVERSE},${MERGED_QC},\
+FILES_FASTQ="${R1},${R2},${MERGED},${UNMERGED_FORWARD},${UNMERGED_REVERSE},${MERGED_QC},\
 ${UNMERGED_FORWARD_QC},${UNMERGED_REVERSE_QC},${CONCAT_QC}"
 
 COUNTS="${OUTDIR}"/seq_counts.tbl
+printf "%s\t%s\t%s\n" "Sample" "n_seq" "aver_seq" > "${COUNTS}"
 
 IFS=","
+
 for F in $( echo "${FILES_FASTQ}" ); do
 
   NAME=$(basename "${F}")
@@ -164,8 +165,7 @@ for F in $( echo "${FILES_FASTQ}" ); do
   L=$( infoseq "${F}" | awk ' NR > 1 { sum = sum + $6 } END { print sum }' )
   A=$( echo  "${L}" / "${N}" | bc -l )
 
-  echo -e "${NAME}\t${N}\t${A}" >> "${COUNTS}"
-  ls "${F}"
+  printf "%s\t%.3f\t%.3f\n" "${NAME}" "${N}" "${A}" >> "${COUNTS}"
 
 done
 
@@ -183,7 +183,7 @@ for F in $( echo "${FILES_FASTA}" ); do
 
   L=$( infoseq "${F}" | awk ' NR > 1 { sum = sum + $6 } END { print sum }' )
   A=$( echo "${L}" / "${N}" | bc -l )
-  echo -e "${NAME}\t${N}\t${A}" >> "${COUNTS}"
+  printf "%s\t%.3f\t%.3f\n" "${NAME}" "${N}" "${A}" >> "${COUNTS}"
 
 done
 
