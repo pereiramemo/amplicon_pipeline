@@ -15,7 +15,7 @@ It consists of the following tasks:
 
 
 ## Pre-processing (workflow 2)
-The pre-processing script is `preprocess_mallorca_workflow.bash`.
+The pre-processing script is `preprocess_workflow2.bash`.
 It consists of the following tasks:
 1. Quality trim with [SolexaQA](http://solexaqa.sourceforge.net/). We trim bases with a quality lower than 20 (--phredcutoff 20).
 2. Rename files (SolexaQA output names are messy).
