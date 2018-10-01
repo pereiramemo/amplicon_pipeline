@@ -3,7 +3,7 @@
 ###############################################################################
 
 RUN_DIR="$(dirname "$(readlink -f "$0")")"
-RUN_DIR="/bioinf/home/epereira/workspace/16S_analyses/lagunas_16S_analysis2/scripts"
+# RUN_DIR="/bioinf/home/epereira/workspace/16S_analyses/lagunas_16S_analysis2/scripts"
 source "${RUN_DIR}"/config
 
 R1="${1}"
@@ -11,9 +11,9 @@ R2="${2}"
 OUTDIR="${3}"
 NSLOTS="${4}"
 
-R1="${DATA}"/amp_size_248/3_S3_L001_R1_001.fastq
-R2="${DATA}"/amp_size_248/3_S3_L001_R2_001.fastq
-OUTDIR="${RESULTS}"/test
+# R1="${DATA}"/amp_size_248/3_S3_L001_R1_001.fastq
+# R2="${DATA}"/amp_size_248/3_S3_L001_R2_001.fastq
+# OUTDIR="${RESULTS}"/test
 
 mkdir "${OUTDIR}"
 
@@ -106,7 +106,7 @@ mv "${SUMMARY_PDF_QC_LF_TMP}" "${SUMMARY_PDF_QC_LF}"
 ###############################################################################
 
 R1_QC_LF_CLIPPED_PAIRED="${OUTDIR}"/$(basename "${R1_QC_LF/.fastq/}" )\_clipped_paired.fastq
-R2_QC_LF_CLIPPED_PAIRED="${OUTDIR}"/$(basename "${R2_QC_LF/.fastq/}" )\_clipped_peired.fastq
+R2_QC_LF_CLIPPED_PAIRED="${OUTDIR}"/$(basename "${R2_QC_LF/.fastq/}" )\_clipped_paired.fastq
 R1_QC_LF_CLIPPED_UNPAIRED="${OUTDIR}"/$(basename "${R1_QC_LF/.fastq/}" )\_clipped_unpaired.fastq
 R2_QC_LF_CLIPPED_UNPAIRED="${OUTDIR}"/$(basename "${R2_QC_LF/.fastq/}" )\_clipped_unpaired.fastq
 
@@ -157,11 +157,11 @@ MERGED=$(basename "${R1/R1/merged}" .fastq)
 cd "${OUTDIR}"
 
 "${flash}" \
---threads "${NSLOTS}" \
---output-prefix "${MERGED}" \
---max-overlap 200 \
-"${R1_QC_LF_CLIPPED_PAIRED}" \
-"${R2_QC_LF_CLIPPED_PAIRED}"
+  --threads "${NSLOTS}" \
+  --output-prefix "${MERGED}" \
+  --max-overlap 200 \
+  "${R1_QC_LF_CLIPPED_PAIRED}" \
+  "${R2_QC_LF_CLIPPED_PAIRED}"
 
 if [[ $? != 0 ]]; then
   echo "fasta conversion failed"
@@ -191,9 +191,9 @@ IFS=","
 
 for F in $( echo "${FILES_FASTQ}" ); do
 
-  if [[ -s "${F}" ]]; then
-
     NAME=$(basename "${F}")
+
+    if [[ -s "${F}" ]]; then
     N=$( count_fastq "${F}" )
     L=$( infoseq "${F}" | awk ' NR > 1 { sum = sum + $6 } END { print sum }' )
     A=$( echo  "${L}" / "${N}" | bc -l )
