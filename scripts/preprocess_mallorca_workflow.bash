@@ -121,9 +121,8 @@ java -jar "${trimmomatic}" PE \
   "${R2_QC_LF_CLIPPED_UNPAIRED}" \
   ILLUMINACLIP:"${ADAPTERS}"/TruSeq3-PE.fa:2:30:10:3:true
 
-
 if [[ $? != 0 ]]; then
-  echo "trimmomatic failed"
+  echo "pe trimmomatic failed"
   exit 1
 fi
 
@@ -143,7 +142,7 @@ if [[ -s  "${SE_QC_LF}" ]]; then
     ILLUMINACLIP:"${ADAPTERS}"/TruSeq3-SE.fa:2:30:10
 
   if [[ $? != 0 ]]; then
-    echo "trimmomatic failed"
+    echo "se trimmomatic failed"
     exit 1
   fi
 fi
@@ -164,7 +163,7 @@ cd "${OUTDIR}"
   "${R2_QC_LF_CLIPPED_PAIRED}"
 
 if [[ $? != 0 ]]; then
-  echo "fasta conversion failed"
+  echo "merge with ${flash} failed"
   exit 1
 fi
 
@@ -221,6 +220,11 @@ cat "${SE_QC_LF_CLIPPED}"  \
      "${OUTDIR}/${MERGED}".notCombined_2.fastq >> \
      "${OUTDIR}/${MERGED}".extendedFrags.fastq
 
+if [[ $? != 0 ]]; then
+  echo "concatenate files failed"
+  exit 1
+fi
+
 ###############################################################################
 ## 10 - Convert to fasaa
 ###############################################################################
@@ -229,11 +233,21 @@ cat "${SE_QC_LF_CLIPPED}"  \
 "${OUTDIR}/${MERGED}".extendedFrags.fastq > \
 "${OUTDIR}/${MERGED}".extendedFrags.fasta
 
+if [[ $? != 0 ]]; then
+  echo " convert to fasta with ${fq2fa} faied"
+  exit 1
+fi
+
 ###############################################################################
 ## 11 - Rename sequences: add sample name
 ###############################################################################
 
 sed -i "s/^>/>${SAMPLE_NAME}_/" "${OUTDIR}/${MERGED}".extendedFrags.fasta
+
+if [[ $? != 0 ]]; then
+  echo "rename headers failed"
+  exit 1
+fi
 
 ###############################################################################
 ## 12 - Clean
@@ -255,3 +269,7 @@ rm "${R1_QC}" \
    "${OUTDIR}/${MERGED}".extendedFrags.fastq
 
 
+if [[ $? != 0 ]]; then
+  echo "clean failed"
+  exit 1
+fi
