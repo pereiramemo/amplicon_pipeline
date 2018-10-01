@@ -3,7 +3,7 @@
 ###############################################################################
 
 RUN_DIR="$(dirname "$(readlink -f "$0")")"
-# RUN_DIR="/bioinf/home/epereira/workspace/16S_analyses/lagunas_16S_analysis2/scripts"
+RUN_DIR="/bioinf/home/epereira/workspace/16S_analyses/lagunas_16S_analysis2/scripts"
 source "${RUN_DIR}"/config
 
 R1="${1}"
@@ -11,9 +11,9 @@ R2="${2}"
 OUTDIR="${3}"
 NSLOTS="${4}"
 
-# R1="${DATA}"/amp_size_248/3_S3_L001_R1_001.fastq
-# R2="${DATA}"/amp_size_248/3_S3_L001_R2_001.fastq
-# OUTDIR="${RESULTS}"/test
+R1="${DATA}"/amp_size_248/3_S3_L001_R1_001.fastq
+R2="${DATA}"/amp_size_248/3_S3_L001_R2_001.fastq
+OUTDIR="${RESULTS}"/test
 
 mkdir "${OUTDIR}"
 
@@ -58,10 +58,8 @@ R2_QC_HIST="${OUTDIR}"/$(basename "${R2/.fastq/}" )\_qc.segments_hist.pdf
 
 mv "${R1_QC_TMP}" "${R1_QC}"
 mv "${R2_QC_TMP}" "${R2_QC}"
-
 mv "${R1_QC_SEG_TMP}" "${R1_QC_SEG}"
 mv "${R2_QC_SEG_TMP}" "${R2_QC_SEG}"
-
 mv "${R1_QC_HIST_TMP}" "${R1_QC_HIST}"
 mv "${R2_QC_HIST_TMP}" "${R2_QC_HIST}"
 
@@ -89,7 +87,6 @@ DISC_QC_LF_TMP="${R1_QC}".discard
 SUMMARY_QC_LF_TMP="${R1_QC}".summary.txt
 SUMMARY_PDF_QC_LF_TMP="${R1_QC}".summary.txt.pdf
 
-
 R1_QC_LF="${R1_QC/.fastq/}"_lf_paired.fastq
 R2_QC_LF="${R2_QC/.fastq/}"_lf_paired.fastq
 SE_QC_LF="${R1_QC/.fastq/}"_lf_single.fastq
@@ -105,7 +102,7 @@ mv "${SUMMARY_QC_LF_TMP}" "${SUMMARY_QC_LF}"
 mv "${SUMMARY_PDF_QC_LF_TMP}" "${SUMMARY_PDF_QC_LF}"
 
 ###############################################################################
-## 5 - trim adapters
+## 5 - trim adapters: PE
 ###############################################################################
 
 R1_QC_LF_CLIPPED_PAIRED="${OUTDIR}"/$(basename "${R1_QC_LF/.fastq/}" )\_clipped_paired.fastq
@@ -115,7 +112,7 @@ R2_QC_LF_CLIPPED_UNPAIRED="${OUTDIR}"/$(basename "${R2_QC_LF/.fastq/}" )\_clippe
 
 java -jar "${trimmomatic}" PE \
   -threads "${NSLOTS}" \
-  -trimlog "${OUTDIR}"/trimmomatic.log \
+  -trimlog "${OUTDIR}"/pe_trimmomatic.log \
   "${R1_QC_LF}" \
   "${R2_QC_LF}" \
   "${R1_QC_LF_CLIPPED_PAIRED}" \
@@ -131,7 +128,28 @@ if [[ $? != 0 ]]; then
 fi
 
 ###############################################################################
-## 6 - Merge with Flash
+## 6 - trim adapters: SE
+###############################################################################
+
+SE_QC_LF_CLIPPED="${OUTDIR}"/$(basename "${SE_QC_LF/.fastq/}" )\_clipped.fastq
+
+if [[ -s  "${SE_QC_LF}" ]]; then
+
+  java -jar "${trimmomatic}" SE \
+    -threads "${NSLOTS}" \
+    -trimlog "${OUTDIR}"/se_trimmomatic.log \
+    "${SE_QC_LF}" \
+    "${SE_QC_LF_CLIPPED}" \
+    ILLUMINACLIP:"${ADAPTERS}"/TruSeq3-SE.fa:2:30:10
+
+  if [[ $? != 0 ]]; then
+    echo "trimmomatic failed"
+    exit 1
+  fi
+fi
+
+###############################################################################
+## 7 - Merge with Flash
 ###############################################################################
 
 MERGED=$(basename "${R1/R1/merged}" .fastq)
@@ -153,12 +171,18 @@ fi
 cd "${RUN_DIR}"
 
 ###############################################################################
-## 7 - count sequence number and length
+## 8 - count sequence number and length
 ###############################################################################
 
-FILES_FASTQ="${SE_QC_LF},${R1_QC_LF_CLIPPED_UNPAIRED},\
-${R2_QC_LF_CLIPPED_UNPAIRED},${OUTDIR}/${MERGED}.notCombined_1.fastq,\
-${OUTDIR}/${MERGED}.notCombined_2.fastq,${OUTDIR}/${MERGED}.extendedFrags.fastq"
+FILES_FASTQ="${R1},${R2},\
+${R1_QC},${R2_QC},\
+${R1_QC_LF},${R2_QC_LF},${SE_QC_LF},${DISC_QC_LF},\
+${R1_QC_LF_CLIPPED_PAIRED},${R1_QC_LF_CLIPPED_UNPAIRED},\
+${R2_QC_LF_CLIPPED_PAIRED},${R2_QC_LF_CLIPPED_UNPAIRED},\
+${SE_QC_LF_CLIPPED},\
+${OUTDIR}/${MERGED}.notCombined_1.fastq,\
+${OUTDIR}/${MERGED}.notCombined_2.fastq,\
+${OUTDIR}/${MERGED}.extendedFrags.fastq"
 
 COUNTS="${OUTDIR}"/seq_counts.tbl
 printf "%s\t%s\t%s\n" "Sample" "n_seq" "aver_seq" > "${COUNTS}"
@@ -187,10 +211,10 @@ if [[ $? != 0 ]]; then
 fi
 
 ###############################################################################
-## 8 - Concatenate all reads
+## 9 - Concatenate all reads
 ###############################################################################
 
-cat "${SE_QC_LF}"  \
+cat "${SE_QC_LF_CLIPPED}"  \
      "${R1_QC_LF_CLIPPED_UNPAIRED}" \
      "${R2_QC_LF_CLIPPED_UNPAIRED}" \
      "${OUTDIR}/${MERGED}".notCombined_1.fastq \
@@ -198,25 +222,32 @@ cat "${SE_QC_LF}"  \
      "${OUTDIR}/${MERGED}".extendedFrags.fastq
 
 ###############################################################################
-## 9 - Convert to fasaa
+## 10 - Convert to fasaa
 ###############################################################################
 
 "${fq2fa}" \
 "${OUTDIR}/${MERGED}".extendedFrags.fastq > \
 "${OUTDIR}/${MERGED}".extendedFrags.fasta
 
-
 ###############################################################################
-## 10 - Rename sequences: add sample name
+## 11 - Rename sequences: add sample name
 ###############################################################################
 
 sed -i "s/^>/>${SAMPLE_NAME}_/" "${OUTDIR}/${MERGED}".extendedFrags.fasta
 
 ###############################################################################
-## 11 - Clean
+## 12 - Clean
 ###############################################################################
 
-rm "${SE_QC_LF}"  \
+rm "${R1_QC}" \
+   "${R2_QC}" \
+   "${R1_QC_LF}" \
+   "${R2_QC_LF}" \
+   "${SE_QC_LF}"  \
+   "${DISC_QC_LF}" \
+   "${SE_QC_LF_CLIPPED}" \
+   "${R1_QC_LF_CLIPPED_PAIRED}" \
+   "${R2_QC_LF_CLIPPED_PAIRED}" \
    "${R1_QC_LF_CLIPPED_UNPAIRED}" \
    "${R2_QC_LF_CLIPPED_UNPAIRED}" \
    "${OUTDIR}/${MERGED}".notCombined_1.fastq \
