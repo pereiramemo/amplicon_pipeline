@@ -14,7 +14,7 @@ It consists of the following tasks:
 9. Clean intermediate files.
 
 
-## Pre-processing (Mallorca pipeline)
+## Pre-processing (workflow 2)
 The pre-processing script is `preprocess_mallorca_workflow.bash`.
 It consists of the following tasks:
 1. Quality trim with [SolexaQA](http://solexaqa.sourceforge.net/). We trim bases with a quality lower than 20 (--phredcutoff 20).
