@@ -18,8 +18,9 @@ It consists of the following tasks:
 The pre-processing script is `preprocess_mallorca_workflow.bash`.
 It consists of the following tasks:
 1. Quality trim with [SolexaQA](http://solexaqa.sourceforge.net/). We trim bases with a quality lower than 20 (--phredcutoff 20).
-2. Remove short sequences with [SolexaQA](http://solexaqa.sourceforge.net/). Sequences shorter than 50bp are discarded (--length 50).
-4. Rename files (SolexaQA output names are messy).
+2. Rename files (SolexaQA output names are messy).
+3. Remove short sequences with [SolexaQA](http://solexaqa.sourceforge.net/). Sequences shorter than 50bp are discarded (--length 50).
+4. Rename files.
 5. Trim adapters in pair-end with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-PE.fa adapters (HiSeq and MiSeq machines).
 6. Trim adapters in single-end with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-SE.fa adapters (HiSeq and MiSeq machines).
 7. Merge with Flash [Flash](https://ccb.jhu.edu/software/FLASH/).
