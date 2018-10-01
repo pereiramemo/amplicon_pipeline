@@ -21,8 +21,8 @@ It consists of the following tasks:
 2. Rename files (SolexaQA output names are messy).
 3. Remove short sequences with [SolexaQA](http://solexaqa.sourceforge.net/). Sequences shorter than 50bp are discarded (--length 50).
 4. Rename files.
-5. Trim adapters in pair-end with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-PE.fa adapters (HiSeq and MiSeq machines).
-6. Trim adapters in single-end with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-SE.fa adapters (HiSeq and MiSeq machines).
+5. Trim adapters in pair-end reads with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-PE.fa adapters (HiSeq and MiSeq machines).
+6. Trim adapters in single-end reads with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-SE.fa adapters (HiSeq and MiSeq machines).
 7. Merge with Flash [Flash](https://ccb.jhu.edu/software/FLASH/).
 8. Count sequence number and length.
 9. Concatenate all reads preprocessed (single-end + merged reads).
