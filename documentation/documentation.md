@@ -26,7 +26,7 @@ It consists of the following tasks:
 7. Merge with Flash [Flash](https://ccb.jhu.edu/software/FLASH/).
 8. Count sequence number and length.
 9. Concatenate all preprocessed reads (single-end + merged reads).
-10. Convert to fasta with [fq2fh.sh](https://github.com/pereiramemo/16S_analysis_pipelines/blob/master/scripts/fq2fa.sh).
+10. Convert fastq to fasta with [fq2fh.sh](https://github.com/pereiramemo/16S_analysis_pipelines/blob/master/scripts/fq2fa.sh).
 11. Rename sequences: add sample name.
 12. Clean intermediate files.
 
