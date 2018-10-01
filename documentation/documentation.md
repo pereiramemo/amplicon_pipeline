@@ -8,7 +8,7 @@ It consists of the following tasks:
 3. Concatenate all files in single multifastq.
 4. Convert fastq to fasta.
 5. Dereplicate with [vsearch](https://github.com/torognes/vsearch) keeping singletons (--minuniquesize 1).
-6. Check for chimeras with [vsearch](https://github.com/torognes/vsearch). We use a minimum abundance ratio of parent vs. chimera of 2 (--abskew  1.5) and the fasta is output as one line per sequence (--fasta_width 0).
+6. Check for chimeras with [vsearch](https://github.com/torognes/vsearch). We use a minimum abundance ratio of parent vs. chimera of 2 (--abskew 2) and the fasta is output as one line per sequence (--fasta_width 0).
 7. Count sequence number and length.
 8. Compute R1 and R2 stats with [vsearch](https://github.com/torognes/vsearch) --fastq_stats.
 9. Clean intermediate files.
@@ -23,7 +23,7 @@ It consists of the following tasks:
 4. Merge with [Flash](https://ccb.jhu.edu/software/FLASH/).
 5. Concatenate all preprocessed reads (single-end + merged reads).
 6. Convert fastq to fasta with [fq2fh.sh](https://github.com/pereiramemo/16S_analysis_pipelines/blob/master/scripts/fq2fa.sh).
-7. Check for chimeras with [vsearch](https://github.com/torognes/vsearch). We use a minimum abundance ratio of parent vs. chimera of 2 (--abskew  1.5) and the fasta is output as one line per sequence (--fasta_width 0).
+7. Check for chimeras with [vsearch](https://github.com/torognes/vsearch). We use a minimum abundance ratio of parent vs. chimera of 2 (--abskew 2) and the fasta is output as one line per sequence (--fasta_width 0).
 8. Count sequence number and length.
 9. Rename sequences: add sample name.  
 10. Clean intermediate files.
