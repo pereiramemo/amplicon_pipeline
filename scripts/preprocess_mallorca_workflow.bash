@@ -268,7 +268,6 @@ rm "${R1_QC}" \
    "${OUTDIR}/${MERGED}".notCombined_2.fastq \
    "${OUTDIR}/${MERGED}".extendedFrags.fastq
 
-
 if [[ $? != 0 ]]; then
   echo "clean failed"
   exit 1
