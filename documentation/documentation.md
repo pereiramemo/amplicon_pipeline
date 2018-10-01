@@ -23,7 +23,7 @@ It consists of the following tasks:
 4. Rename files.
 5. Trim adapters in pair-end reads with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-PE.fa adapters (HiSeq and MiSeq machines).
 6. Trim adapters in single-end reads with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-SE.fa adapters (HiSeq and MiSeq machines).
-7. Merge with Flash [Flash](https://ccb.jhu.edu/software/FLASH/).
+7. Merge with [Flash](https://ccb.jhu.edu/software/FLASH/).
 8. Count sequence number and length.
 9. Concatenate all preprocessed reads (single-end + merged reads).
 10. Convert fastq to fasta with [fq2fh.sh](https://github.com/pereiramemo/16S_analysis_pipelines/blob/master/scripts/fq2fa.sh).
