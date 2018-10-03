@@ -67,7 +67,8 @@ java -jar "${trimmomatic}" PE \
   "${R1_QC_CLIPPED_UNPAIRED}" \
   "${R2_QC_CLIPPED_PAIRED}" \
   "${R2_QC_CLIPPED_UNPAIRED}" \
-  ILLUMINACLIP:"${ADAPTERS}"/TruSeq3-PE.fa:2:30:10:3:true
+  ILLUMINACLIP:"${ADAPTERS}"/TruSeq3-PE.fa:2:30:10 \
+  MINLEN:50
 
 if [[ $? != 0 ]]; then
   echo "pe trimmomatic failed"
@@ -87,7 +88,8 @@ if [[ -s  "${SE_QC}" ]]; then
     -trimlog "${OUTDIR}"/se_trimmomatic.log \
     "${SE_QC}" \
     "${SE_QC_CLIPPED}" \
-    ILLUMINACLIP:"${ADAPTERS}"/TruSeq3-SE.fa:2:30:10
+    ILLUMINACLIP:"${ADAPTERS}"/TruSeq3-SE.fa:2:30:10 \
+    MINLEN:50
 
   if [[ $? != 0 ]]; then
     echo "se trimmomatic failed"
@@ -106,7 +108,7 @@ cd "${OUTDIR}"
 "${flash}" \
   --threads "${NSLOTS}" \
   --output-prefix "${MERGED}" \
-  --max-overlap 200 \
+  --max-overlap 100 \
   "${R1_QC_CLIPPED_PAIRED}" \
   "${R2_QC_CLIPPED_PAIRED}"
 
