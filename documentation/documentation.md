@@ -42,11 +42,9 @@ It consists of the following tasks:
 8. Clean intermediate files.
 
 <p align="center">
-<b>preprocess_workflow3.bash</b>
 <img src="https://github.com/pereiramemo/16S_analysis_pipelines/blob/master/figures/preprocess_workflow3.jpg">
 </p>
 
-[Figure](figures/preprocess_workflow3.jpg)
 
 
 
