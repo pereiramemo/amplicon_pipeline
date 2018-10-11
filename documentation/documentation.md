@@ -45,9 +45,6 @@ It consists of the following tasks:
 <img src="https://github.com/pereiramemo/16S_analysis_pipelines/blob/master/figures/preprocess_workflow3.jpg">
 </p>
 
-
-
-
 ## Clustering
 We applied two different approaches, one using [cd-hit](http://weizhongli-lab.org/cd-hit/) and the other [swarm](https://github.com/torognes/swarm).  
 The scripts are `cd-hit_workflow.bash` and `swarm_workflow.bash`. Both scripts consist of applying the clustering tool on the pre-processed fasta.
