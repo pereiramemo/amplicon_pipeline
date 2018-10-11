@@ -37,9 +37,14 @@ It consists of the following tasks:
 3. Quality check with [bbduk](https://sourceforge.net/projects/bbmap/). We trim bases with a quality lower than 20 (trimq=20) from both ends (qtrim=rl), and discard reads shorter than 50bp (minlength=50).
 4. Convert fastq to fasta with [fq2fh.sh](https://github.com/pereiramemo/16S_analysis_pipelines/blob/master/scripts/fq2fa.sh).
 5. Check for chimeras with [vsearch](https://github.com/torognes/vsearch). We use a minimum abundance ratio of parent vs. chimera of 2 (--abskew 2) and the fasta is output as one line per sequence (--fasta_width 0).
-6. Count sequence number and length.
-7. Rename sequences: add sample name and sequence id.
+6. Rename sequences: add sample name and sequence id.
+7. Count sequence number and length.
 8. Clean intermediate files.
+
+<p align="center">
+<b>preprocess_workflow3.bash</b>
+<img src="https://github.com/pereiramemo/16S_analysis_pipelines/blob/master/figures/preprocess_workflow3.jpg">
+</p>
 
 [Figure](figures/preprocess_workflow3.jpg)
 
