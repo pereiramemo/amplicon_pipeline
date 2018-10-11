@@ -28,6 +28,23 @@ It consists of the following tasks:
 9. Rename sequences: add sample name.  
 10. Clean intermediate files.
 
+
+## Pre-processing (workflow 3)
+The pre-processing script is `preprocess_workflow2.bash`.
+It consists of the following tasks:
+1. Trim adapters in pair-end reads with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-PE.fa adapters (HiSeq and MiSeq machines). Here again the minimum length (after trimming) is set to 50 (MINLEN:50).
+2. Merge pair-end reads with [pear](https://sco.h-its.org/exelixis/web/software/pear/doc.html) (default parameters).
+3. Quality check with [bbduk](https://sourceforge.net/projects/bbmap/). We trim bases with a quality lower than 20 (trimq=20) from both ends (qtrim=rl), and discard reads shorter than 50bp (minlength=50).
+4. Convert fastq to fasta with [fq2fh.sh](https://github.com/pereiramemo/16S_analysis_pipelines/blob/master/scripts/fq2fa.sh).
+5. Check for chimeras with [vsearch](https://github.com/torognes/vsearch). We use a minimum abundance ratio of parent vs. chimera of 2 (--abskew 2) and the fasta is output as one line per sequence (--fasta_width 0).
+6. Count sequence number and length.
+7. Rename sequences: add sample name and sequence id.
+8. Clean intermediate files.
+
+[Figure](figures/preprocess_workflow3.jpg)
+
+
+
 ## Clustering
 We applied two different approaches, one using [cd-hit](http://weizhongli-lab.org/cd-hit/) and the other [swarm](https://github.com/torognes/swarm).  
 The scripts are `cd-hit_workflow.bash` and `swarm_workflow.bash`. Both scripts consist of applying the clustering tool on the pre-processed fasta.
