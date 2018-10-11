@@ -15,7 +15,6 @@ NSLOTS="${4}"
 # R2="${DATA}"/amp_size_248/3_S3_L001_R2_001.fastq
 # OUTDIR="${RESULTS}"/test
 
-
 mkdir "${OUTDIR}"
 
 if [[ $? != 0 ]]; then
@@ -23,9 +22,9 @@ if [[ $? != 0 ]]; then
   exit 1
 fi
 
-SAMPLE_NAME=$( basename "${OUTDIR}" )
-R1_NAME=$(basename "${R1/.fastq/}" )
-R2_NAME=$(basename "${R2/.fastq/}" )
+SAMPLE_NAME=$( basename "${OUTDIR}")
+R1_NAME=$(basename "${R1/.fastq/}")
+R2_NAME=$(basename "${R2/.fastq/}")
 
 ###############################################################################
 ## 1 - Clip adapters
@@ -76,10 +75,9 @@ UNMERGED_REVERSE="${OUTPREFIX}".unassembled.reverse.fastq
 DISCARDED="${OUTPREFIX}".discarded.fastq
 
 ###############################################################################
-## 2 - quality trimming mergeed
+## 3 - quality trimming mergeed
 ###############################################################################
 
-# merged
 MERGED_QC="${MERGED/.fastq/_qc.fastq}"
 
 "${bbduk}" -Xmx1g \
@@ -91,12 +89,10 @@ overwrite=true \
 trimq=20 \
 threads="${NSLOTS}"
 
-
 if [[ $? != 0 ]]; then
   echo "quality check 1 with ${bbduk} failed"
   exit 1
 fi
-
 
 ###############################################################################
 ## 4 - convert to fasta
@@ -112,7 +108,7 @@ if [[ $? != 0 ]]; then
 fi
 
 ###############################################################################
-## 6 - chimera check
+## 5 - chimera check
 ###############################################################################
 
 MERGED_QC_CC_FASTA="${MERGED_QC_FASTA/.fasta/_cc.fasta}"
@@ -128,6 +124,27 @@ if [[ $? != 0 ]]; then
   echo "chimera check ${vsearch} failed"
   exit 1
 fi
+
+###############################################################################
+## 6 - Rename sequences: add sample name
+###############################################################################
+
+awk -v s="${SAMPLE_NAME}" '{
+  if ( $0 ~ ">" ) {
+    i++
+    sub(">",">Sample_"s"_id_"i"_",$0)
+    print $0;
+  } else {
+    print $0;
+  }
+}' "${MERGED_QC_CC_FASTA}" > "${MERGED_QC_CC_FASTA/.fasta/_tmp.fasta}"
+
+if [[ $? != 0 ]]; then
+  echo "rename headers failed"
+  exit 1
+fi
+
+mv "${MERGED_QC_CC_FASTA/.fasta/_tmp.fasta}" "${MERGED_QC_CC_FASTA}"
 
 ###############################################################################
 ## 7 - count sequence number and length
@@ -172,7 +189,7 @@ if [[ $? != 0 ]]; then
 fi
 
 ###############################################################################
-## 9 - clean
+## 8 - clean
 ###############################################################################
 
 # rm "${R1_CLIPPED_PAIRED}" \
