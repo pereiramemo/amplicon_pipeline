@@ -14,6 +14,10 @@ NSLOTS="${4}"
 # R1="${DATA}"/amp_size_248/3_S3_L001_R1_001.fastq
 # R2="${DATA}"/amp_size_248/3_S3_L001_R2_001.fastq
 # OUTDIR="${RESULTS}"/test
+# 
+# R1="${DATA}"/osd/OSD1_R1_16S_raw.fastq 
+# R2="${DATA}"/osd/OSD1_R2_16S_raw.fastq
+# OUTDIR="${RESULTS}"/test
 
 mkdir "${OUTDIR}"
 
@@ -44,7 +48,7 @@ java -jar "${trimmomatic}" PE \
   "${R1_CLIPPED_UNPAIRED}" \
   "${R2_CLIPPED_PAIRED}" \
   "${R2_CLIPPED_UNPAIRED}" \
-  ILLUMINACLIP:"${ADAPTERS}"/TruSeq3-PE.fa:2:30:10 \
+  ILLUMINACLIP:"${ADAPTERS}"/TruSeq3-PE.fa:2:30:10:8:true \
   MINLEN:50
 
 if [[ $? != 0 ]]; then
