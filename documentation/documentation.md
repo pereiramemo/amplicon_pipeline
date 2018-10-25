@@ -52,7 +52,7 @@ The scripts are `cd-hit_workflow.bash` and `swarm_workflow.bash`. Both scripts c
 
 
 ## Crossing tables (abund2taxa_commands.bash)
-1. Remove first three rows from TAXA_ANNOT; Select the sequence header and taxonomic classification, simplify header, convert tab to space in the taxonomic classification field, remove empty spaces at the end of the end of the line.
+1. Remove first three rows from TAXA_ANNOT; Select the sequence header and taxonomic classification, simplify header, convert tab to space in the taxonomic classification field, remove empty spaces at the end of the line.
 2. Simplify header from SWARM_ABUND and remove empty spaces at the end of the end of the line.
 3. Check numbers: unique headers in TAXA_ANNOT and SWARM_ABUND, and the number of shared headers.
 4. Cross tables with left_joiner2.perl
