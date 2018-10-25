@@ -50,7 +50,6 @@ We applied two different approaches, one using [cd-hit](http://weizhongli-lab.or
 The scripts are `cd-hit_workflow.bash` and `swarm_workflow.bash`. Both scripts consist of applying the clustering tool on the pre-processed fasta.
 `swarm_workflow.bash` includes a dereprlication step with vsearch, where the abundance of each read is added as "_[INT]" at the end of the sequence id.
 
-
 ## Cross tables (abund2taxa_commands.bash)
 1. Remove first three rows from TAXA_ANNOT; Select the sequence header and taxonomic classification, simplify header, convert tab to space in the taxonomic classification field, remove empty spaces at the end of the line.
 2. Simplify header from SWARM_ABUND and remove empty spaces at the end of the end of the line.
