@@ -52,10 +52,10 @@ The scripts are `cd-hit_workflow.bash` and `swarm_workflow.bash`. Both scripts c
 
 ## Cross tables (abund2taxa_commands.bash)
 1. Remove first three rows from TAXA_ANNOT; Select the sequence header and taxonomic classification, simplify header, convert tab to space in the taxonomic classification field, remove empty spaces at the end of the line.
-2. Prepare .clster file for taxa annot propagation. Here we create a table with all the sequences matched to their representative.
-3. Propagate the taxonomic annot to the table created in 2, with left_joiner2.perl.
+2. Prepare .clster file for taxa annot propagation. Here we create the table SEQ2REP with all the sequences matched to their representative.
+3. Propagate the taxonomic annot to the table created in SEQ2REP with left_joiner2.perl, to create the table SEQS2TAXA
 4. Simplify header from SWARM_ABUND and remove empty spaces at the end of the line.
-5. Check numbers: unique headers in TAXA_ANNOT and SWARM_ABUND, and the number of shared headers.
+5. Check numbers: unique headers in SEQS2TAXA and SWARM_ABUND, and the number of shared headers.
 6. Cross tables with left_joiner2.perl
 
 
