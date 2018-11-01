@@ -27,7 +27,7 @@ ABUND_TBL_long_redu <- ABUND_TBL_long %>%
 ABUND_TBL_wide <- spread(data = ABUND_TBL_long_redu, key = sample, value = abund, fill = 0) 
 
 ###############################################################################
-### 4. Format to abudnance matrix: sample x otu
+### 4. Format to abundance matrix: sample x otu
 ###############################################################################
 
 ABUND_TBL_wide_trans <- ABUND_TBL_wide %>% 
