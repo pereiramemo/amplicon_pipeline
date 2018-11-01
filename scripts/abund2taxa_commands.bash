@@ -60,10 +60,10 @@ awk 'BEGIN {OFS ="\t" } {
 ## 3 - propagate taxa annot to all sequences
 ###############################################################################
 
-SEQS2TAXA="${LAGUNAS}/taxa_annot/amp2compare/seqs2taxa.tsv"
+  SEQS2TAXA="${LAGUNAS}/taxa_annot/amp2compare/seqs2taxa.tsv"
 
-"${MODULES}"/left_joiner2.perl "${SEQS2REP}" "${TAXA_ANNOT_REDU}" 2 1 | \
-egrep -v "NA$" | awk 'BEGIN {OFS="\t"; FS="\t"}; {print $1,$4}' > "${SEQS2TAXA}"
+  "${MODULES}"/left_joiner2.perl "${SEQS2REP}" "${TAXA_ANNOT_REDU}" 2 1 | \
+  egrep -v "NA$" | awk 'BEGIN {OFS="\t"; FS="\t"}; {print $1,$4}' > "${SEQS2TAXA}"
 
 ###############################################################################
 ## 4 - modify headers in SWARM_ABUND
@@ -101,7 +101,14 @@ cat <(cut -f5 "${SWARM_ABUND_REDU}" | sort | uniq) \
 
 CLUST2ABUND2TAXA="${LAGUNAS}/taxa_annot/amp2compare/clust2abund2taxa.tsv"
 
+# Define header
+echo -e "cluster\tsample\tabund\tseq_rep\ttaxonomy" > "${CLUST2ABUND2TAXA}"
+
+# Cross tables and format output
 "${MODULES}"/left_joiner2.perl "${SWARM_ABUND_REDU}" "${SEQS2TAXA}"  5 1 | \
-awk 'BEGIN {OFS="\t"; FS="\t"}; { print $1,$2,$3,$4,$5,$7}' > "${CLUST2ABUND2TAXA}"
+awk 'BEGIN {OFS="\t"; FS="\t"}; { print $1,$2,$3,$4,$5,$7}' | \
+sed "s/\t/_/" >> "${CLUST2ABUND2TAXA}"
+
+
 
 
