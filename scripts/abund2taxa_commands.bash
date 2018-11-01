@@ -41,7 +41,7 @@ paste "${HEADER_TMP}" "${TAXA_TMP}" > "${TAXA_ANNOT_REDU}"
 rm  "${HEADER_TMP}" "${TAXA_TMP}" 
 
 ###############################################################################
-## 2 - prepare .clster file for taxa annot propagation
+## 2 - prepare CLSTR file for taxa annot propagation
 ###############################################################################
 
 SEQS2REP="${LAGUNAS}/taxa_annot/amp2compare/seqs2rep.tsv"
@@ -50,8 +50,8 @@ awk 'BEGIN {OFS ="\t" } {
   if ($1 ~ ">") {
     rep_seq=gensub(/>(.*id_[0-9]+).*/,"\\1","g",$1);
   } else {
-  clust_seq = gensub(/>(.*id_[0-9]+).*/,"\\1","g",$3);
-  printf "%s\t%s\n", clust_seq,rep_seq;
+    clust_seq = gensub(/>(.*id_[0-9]+).*/,"\\1","g",$3);
+    printf "%s\t%s\n", clust_seq,rep_seq;
   }
   
 }' "${CLSTR}" > "${SEQS2REP}"
