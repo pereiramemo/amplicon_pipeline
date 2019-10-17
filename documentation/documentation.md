@@ -30,7 +30,7 @@ It consists of the following tasks:
 
 
 ## Pre-processing (workflow 3)
-The pre-processing script is `preprocess_workflow2.bash`.
+The pre-processing script is `preprocess_workflow3.bash`.
 It consists of the following tasks:
 1. Trim adapters in pair-end reads with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-PE.fa adapters (HiSeq and MiSeq machines). Here again the minimum length (after trimming) is set to 50 (MINLEN:50).
 2. Merge pair-end reads with [pear](https://sco.h-its.org/exelixis/web/software/pear/doc.html) (default parameters).
