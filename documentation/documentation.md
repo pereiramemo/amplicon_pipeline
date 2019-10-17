@@ -33,7 +33,7 @@ It consists of the following tasks:
 The pre-processing script is `preprocess_workflow3.bash`.
 It consists of the following tasks:
 1. Trim adapters in paired-end reads with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-PE.fa adapters (HiSeq and MiSeq machines). Here again the minimum length (after trimming) is set to 50 (MINLEN:50).
-2. Merge pair-end reads with [pear](https://sco.h-its.org/exelixis/web/software/pear/doc.html) (default parameters).
+2. Merge paired-end reads with [pear](https://sco.h-its.org/exelixis/web/software/pear/doc.html) (default parameters).
 3. Quality check with [bbduk](https://sourceforge.net/projects/bbmap/). We trim bases with a quality lower than 20 (trimq=20) from both ends (qtrim=rl), and discard reads shorter than 50bp (minlength=50).
 4. Convert fastq to fasta with [fq2fh.sh](https://github.com/pereiramemo/16S_analysis_pipelines/blob/master/scripts/fq2fa.sh).
 5. Check for chimeras with [vsearch](https://github.com/torognes/vsearch). We use a minimum abundance ratio of parent vs. chimera of 2 (--abskew 2) and the fasta is output as one line per sequence (--fasta_width 0).
