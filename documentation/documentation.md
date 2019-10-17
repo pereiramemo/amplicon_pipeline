@@ -3,7 +3,7 @@
 ## Pre-processing (original)
 The pre-processing script is `preprocess_workflow.bash`.
 It consists of the following tasks:
-1. Merge pair-end reads with [pear](https://sco.h-its.org/exelixis/web/software/pear/doc.html) (default parameters).
+1. Merge paired-end reads with [pear](https://sco.h-its.org/exelixis/web/software/pear/doc.html) (default parameters).
 2. Quality trim with [bbduk](https://sourceforge.net/projects/bbmap/). We trim bases with a quality lower than 25 (trimq=25) from both ends (qtrim=rl) in merged and unmerged reads, and discard reads shorter than 100bp (minlength=100).
 3. Concatenate all files in single multifastq.
 4. Convert fastq to fasta.
@@ -18,7 +18,7 @@ It consists of the following tasks:
 The pre-processing script is `preprocess_workflow2.bash`.
 It consists of the following tasks:
 1. Quality check with [bbduk](https://sourceforge.net/projects/bbmap/). We trim bases with a quality lower than 20 (trimq=20) from both ends (qtrim=rl), and discard reads shorter than 50bp (minlength=50).
-2. Trim adapters in pair-end reads with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-PE.fa adapters (HiSeq and MiSeq machines). Here again the minimum length (after trimming) is set to 50 (MINLEN:50).
+2. Trim adapters in paired-end reads with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-PE.fa adapters (HiSeq and MiSeq machines). Here again the minimum length (after trimming) is set to 50 (MINLEN:50).
 3. Trim adapters in single-end reads with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-SE.fa adapters (HiSeq and MiSeq machines). Minimum length set to 50 (MINLEN:50).
 4. Merge with [Flash](https://ccb.jhu.edu/software/FLASH/).
 5. Concatenate all preprocessed reads (single-end + merged reads).
@@ -32,7 +32,7 @@ It consists of the following tasks:
 ## Pre-processing (workflow 3)
 The pre-processing script is `preprocess_workflow3.bash`.
 It consists of the following tasks:
-1. Trim adapters in pair-end reads with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-PE.fa adapters (HiSeq and MiSeq machines). Here again the minimum length (after trimming) is set to 50 (MINLEN:50).
+1. Trim adapters in paired-end reads with [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), using the TruSeq3-PE.fa adapters (HiSeq and MiSeq machines). Here again the minimum length (after trimming) is set to 50 (MINLEN:50).
 2. Merge pair-end reads with [pear](https://sco.h-its.org/exelixis/web/software/pear/doc.html) (default parameters).
 3. Quality check with [bbduk](https://sourceforge.net/projects/bbmap/). We trim bases with a quality lower than 20 (trimq=20) from both ends (qtrim=rl), and discard reads shorter than 50bp (minlength=50).
 4. Convert fastq to fasta with [fq2fh.sh](https://github.com/pereiramemo/16S_analysis_pipelines/blob/master/scripts/fq2fa.sh).
