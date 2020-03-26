@@ -1,6 +1,6 @@
-# 16S_analysis_pipelines
+# Amplicon Pipelines
 ## Intro
-This repo includes pipelines for the preprocessing, clustering and annotation of 16S sequence data. 
+This repo includes pipelines for the preprocessing, clustering and annotation of 16S rRNA sequence data. 
 It additionally provides the scripts to glue the outputs of these pipelines.
 
 ## Requisites 
@@ -13,6 +13,8 @@ It additionally provides the scripts to glue the outputs of these pipelines.
 7. [SolexaQA](http://solexaqa.sourceforge.net/)
 8. [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic)
 9. [Flash](https://ccb.jhu.edu/software/FLASH/)
+10. [DADA2](https://benjjneb.github.io/dada2/index.html)
+
 
 Once these tools are installed, the paths to the executables have to be added to the scripts/config file.
 
