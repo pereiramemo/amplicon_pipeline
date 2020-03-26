@@ -1,5 +1,5 @@
 # Amplicon Pipelines
-## Intro
+
 This repo includes pipelines for the preprocessing, clustering and annotation of 16S rRNA sequence data. 
 It additionally provides the scripts to glue the outputs of these pipelines.
 
