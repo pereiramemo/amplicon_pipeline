@@ -15,7 +15,6 @@ It additionally provides the scripts to glue the outputs of these pipelines.
 9. [Flash](https://ccb.jhu.edu/software/FLASH/)
 10. [DADA2](https://benjjneb.github.io/dada2/index.html)
 
-
 Once these tools are installed, the paths to the executables have to be added to the scripts/config file.
 
 
