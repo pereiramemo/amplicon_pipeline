@@ -1,5 +1,8 @@
 #!/usr/bin/env Rscript
 
+# This code is a modified version of the DADA2 tutorial: 
+# https://benjjneb.github.io/dada2/tutorial.html
+
 ###############################################################################
 ### 1. Def. env
 ###############################################################################
@@ -60,7 +63,7 @@ rawR2 <- sort(list.files(INPUT_DIR, pattern = PATTERN_R2, full.names = T))
 
 sample.names <- basename(rawR1) %>%
                 sub(pattern = PATTERN_R1, replacement = "")
-                
+
 ###############################################################################
 ### 5. Create quality data plots
 ###############################################################################

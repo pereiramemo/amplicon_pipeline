@@ -18,16 +18,11 @@ Usage: ./dada2_pipelin_runnar.bash <options>
 --help                          print this help
 --input_dir CHAR                directory with the input raw fastq files
 --output_dir CHAR               directory to output generated data (i.e., preprocessed data, plots, tables)
---nslots NUM                    number of threads used (default 12)
---trunc_r1 NUM                  number of nuc to remove in R1 from the 3' end (default 250)
---trunc_r2 NUM                  number of nuc to remove in R2 from the 3' end (default 200)
 --pattern_r1 CHAR               patter of R1 reads to load fastq files (default _L001_R1_001.fastq.gz)
 --pattern_r2 CHAR               patter of R2 reads to load fastq files (default _L001_R2_001.fastq.gz)
---bimeras_method CHAR           method to check bimeras: pooled, consensus, per-sample (default consensus)
---min_overlap NUM               minimum number of nucletides to overlap in merging (default 12)
---pooled T|F                    use pooled option when running dada2 (default T)
---qual_plot T|F                 create quality plots
---err_plot T|F                  create error plots
+--primer_fwd                    forward primer sequence used in PCR
+--primer_rev                    reverse primer sequence used in PCR
+--nslots NUM                    number of threads used (default 12)
 --save_workspace T|F            save R workspace image
 --overwrite T|F                 overwrite previous directory
 EOF
@@ -70,45 +65,6 @@ while :; do
   printf 'Using default environment.\n' >&2
   ;;
 #############
-  --nslots)
-  if [[ -n "${2}" ]]; then
-    NSLOTS="${2}"
-    shift
-  fi
-  ;;
-  --nslots=?*)
-  NSLOTS="${1#*=}" # Delete everything up to "=" and assign the remainder.
-  ;;
-  --nslots=) # Handle the empty case
-  printf 'Using default environment.\n' >&2
-  ;;
-#############
-  --trunc_r1)
-  if [[ -n "${2}" ]]; then
-    TRUNC_R1="${2}"
-    shift
-  fi
-  ;;
-  --trunc_r1=?*)
-  TRUNC_R1="${1#*=}" # Delete everything up to "=" and assign the remainder.
-  ;;
-  --trunc_r1=) # Handle the empty case
-  printf 'Using default environment.\n' >&2
-  ;;
-#############
-  --trunc_r2)
-  if [[ -n "${2}" ]]; then
-    TRUNC_R2="${2}"
-    shift
-  fi
-  ;;
-  --trunc_r2=?*)
-  TRUNC_R2="${1#*=}" # Delete everything up to "=" and assign the remainder.
-  ;;
-  --trunc_r2=) # Handle the empty case
-  printf 'Using default environment.\n' >&2
-  ;;
-#############
   --pattern_r1)
   if [[ -n "${2}" ]]; then
     PATTERN_R1="${2}"
@@ -135,70 +91,44 @@ while :; do
   printf 'Using default environment.\n' >&2
   ;;
 #############
-  --bimeras_method)
+  --primer_fwd)
   if [[ -n "${2}" ]]; then
-    BIMERAS_METHOD="${2}"
+    PRIMER_FWD="${2}"
     shift
   fi
   ;;
-  --bimeras_method=?*)
-  BIMERAS_METHOD="${1#*=}" # Delete everything up to "=" and assign the remainder.
+  --primer_fwd=?*)
+  PRIMER_FWD="${1#*=}" # Delete everything up to "=" and assign the remainder.
   ;;
-  --bimeras_method=) # Handle the empty case
+  --primer_fwd=) # Handle the empty case
+  printf 'Using default environment.\n' >&2
+  ;; 
+#############
+  --primer_rev)
+  if [[ -n "${2}" ]]; then
+    PRIMER_REV="${2}"
+    shift
+  fi
+  ;;
+  --primer_rev=?*)
+  PRIMER_REV="${1#*=}" # Delete everything up to "=" and assign the remainder.
+  ;;
+  --primer_rev=) # Handle the empty case
   printf 'Using default environment.\n' >&2
   ;;
 #############
-  --min_overlap)
+  --nslots)
   if [[ -n "${2}" ]]; then
-    MIN_OVERLAP="${2}"
+    NSLOTS="${2}"
     shift
   fi
   ;;
-  --min_overlap=?*)
-  MIN_OVERLAP="${1#*=}" # Delete everything up to "=" and assign the remainder.
+  --nslots=?*)
+  NSLOTS="${1#*=}" # Delete everything up to "=" and assign the remainder.
   ;;
-  --min_overlap=) # Handle the empty case
+  --nslots=) # Handle the empty case
   printf 'Using default environment.\n' >&2
   ;;
-#############
-  --pooled)
-  if [[ -n "${2}" ]]; then
-    POOLED="${2}"
-    shift
-  fi
-  ;;
-  --pooled=?*)
-  POOLED="${1#*=}" # Delete everything up to "=" and assign the remainder.
-  ;;
-  --pooled=) # Handle the empty case
-  printf 'Using default environment.\n' >&2
-  ;;
-#############
-  --qual_plot)
-  if [[ -n "${2}" ]]; then
-    QUAL_PLOT="${2}"
-    shift
-  fi
-  ;;
-  --qual_plot=?*)
-  QUAL_PLOT="${1#*=}" # Delete everything up to "=" and assign the remainder.
-  ;;
-  --qual_plot=) # Handle the empty case
-  printf 'Using default environment.\n' >&2
-  ;;
-#############
-  --err_plot)
-  if [[ -n "${2}" ]]; then
-    ERR_PLOT="${2}"
-    shift
-  fi
-  ;;
-  --err_plot=?*)
-  ERR_PLOT="${1#*=}" # Delete everything up to "=" and assign the remainder.
-  ;;
-  --err_plot=) # Handle the empty case
-  printf 'Using default environment.\n' >&2
-  ;;  
 #############
   --save_workspace)
   if [[ -n "${2}" ]]; then
@@ -243,18 +173,6 @@ done
 # 4. Define defaults
 ###############################################################################
 
-if [[ -z "${NSLOTS}" ]]; then
-  NSLOTS="12"
-fi
-
-if [[ -z "${TRUNC_R1}" ]]; then
-  TRUNC_R1="250"
-fi
-
-if [[ -z "${TRUNC_R2}" ]]; then
-  TRUNC_R2="200"
-fi
-
 if [[ -z "${PATTERN_R1}" ]]; then
   PATTERN_R1="_L001_R1_001.fastq.gz"
 fi
@@ -263,24 +181,8 @@ if [[ -z "${PATTERN_R2}" ]]; then
   PATTERN_R2="_L001_R2_001.fastq.gz"
 fi
 
-if [[ -z "${MIN_OVERLAP}" ]]; then
-  MIN_OVERLAP="12"
-fi
-
-if [[ -z "${BIMERAS_METHOD}" ]]; then
-  BIMERAS_METHOD="consensus"
-fi
-
-if [[ -z "${POOLED}" ]]; then
-  POOLED="T"
-fi
-
-if [[ -z "${QUAL_PLOT}" ]]; then
-  QUAL_PLOT="T"
-fi
-
-if [[ -z "${ERR_PLOT}" ]]; then
-  ERR_PLOT="T"
+if [[ -z "${NSLOTS}" ]]; then
+  NSLOTS="12"
 fi
 
 if [[ -z "${SAVE_WORKSPACE}" ]]; then
@@ -318,23 +220,18 @@ fi
 ###############################################################################
 
 Rscript --vanilla \
-"${dada2_pipeline}" \
+"${primers_removal}" \
 "${INPUT_DIR}" \
 "${OUTPUT_DIR}" \
 "${PATTERN_R1}" \
 "${PATTERN_R2}" \
+"${PRIMER_FWD}" \
+"${PRIMER_REV}" \
 "${NSLOTS}" \
-"${TRUNC_R1}" \
-"${TRUNC_R2}" \
-"${MIN_OVERLAP}" \
-"${BIMERAS_METHOD}" \
-"${POOLED}" \
-"${QUAL_PLOT}" \
-"${ERR_PLOT}" \
 "${SAVE_WORKSPACE}"
 
 if [[ $? != "0" ]]; then
-  echo "dada2_pipeline.R failed"
+  echo "primers_removal.R failed"
   rm -r "${OUTPUT_DIR}"
   exit 1
 fi
