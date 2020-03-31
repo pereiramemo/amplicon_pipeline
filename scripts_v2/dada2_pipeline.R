@@ -31,10 +31,10 @@ QUAL_PLOT <- args[11] %>% as.logical
 ERR_PLOT <- args[12] %>% as.logical
 SAVE_WORKSPACE <- args[13] %>% as.logical
 
-# INPUT_DIR <- "/home/epereira/workspace/indicadores_cuencas_2018/data/toy_dataset/"
-# OUTPUT_DIR <- "/home/epereira/workspace/indicadores_cuencas_2018/output/asv_tmp/"
-# PATTERN_R1 <- "_L001_R1_001_redu.fastq.gz"
-# PATTERN_R2 <- "_L001_R2_001_redu.fastq.gz"
+# INPUT_DIR <- "/home/bioinf/data/indicadores_cuencas_2018/"
+# OUTPUT_DIR <- "/home/epereira/workspace/indicadores_cuencas_2018/output/asv_run0/"
+# PATTERN_R1 <- "_L001_R1_001.fastq.gz"
+# PATTERN_R2 <- "_L001_R2_001.fastq.gz"
 # NSLOTS <- 12
 # TRUNC_R1 <- 250
 # TRUNC_R2 <- 200
@@ -52,6 +52,7 @@ SAVE_WORKSPACE <- args[13] %>% as.logical
 dir.create(OUTPUT_DIR)
 file.path(OUTPUT_DIR,"plots") %>% dir.create 
 file.path(OUTPUT_DIR,"filtered") %>% dir.create
+file.path(OUTPUT_DIR,"tables") %>% dir.create
 
 ###############################################################################
 ### 4. Load data
@@ -160,7 +161,8 @@ mergers <- mergePairs(dadaR1, filtR1,
 ###############################################################################
 
 seqtab <- makeSequenceTable(mergers)
-dim(seqtab)
+x <- dim(seqtab)
+print(paste("asv table dim:", x[1], "x", x[2], sep = " "))
 
 ###############################################################################
 ### 13. Remove chimeras
@@ -170,7 +172,9 @@ print("Bimeras check ...")
 seqtab.nochim <- removeBimeraDenovo(seqtab, method = BIMERAS_METHOD,
                                     multithread = NSLOTS, verbose=TRUE)
 
-dim(seqtab.nochim)
+x <- dim(seqtab.nochim)
+print(paste("asv table (no bimeras) dim:", x[1], "x", x[2], sep = " "))
+
 perc_bim <- (1 - sum(seqtab.nochim)/sum(seqtab))*100
 print(paste("bimeras: ",round(perc_bim,4), "%", sep =""))
 
@@ -195,8 +199,13 @@ track_n_seqs <- data.frame(samples = sample.names,
                            denoisedR1 = sapply(dadaR1, count_seqs),
                            denoisedR2 = sapply(dadaR2, count_seqs), 
                            merged = sapply(mergers, count_seqs),
-                           nobim = rowSums(seqtab.nochim))
+                           nobim = rowSums(seqtab.nochim),
+                           stringsAsFactors = F)
 
+track_n_seqs["all", ] <- data.frame(samples = "all_samples", 
+                                    colSums(track_n_seqs %>% select(-samples)) %>% t,
+                                    stringsAsFactors = F)
+  
 track_n_seqs_long <- track_n_seqs %>%
                      gather(key = "var", value = "value", raw:nobim)
 
@@ -251,7 +260,26 @@ ggsave(seqlength_barplots, filename = filename_seqlength,
        device = "pdf", width = 10, height = 30)
 
 ###############################################################################
-### 19. Save R workspace
+### 19. Save track stats tables
+###############################################################################
+
+# nseq
+filename_nseq <- file.path(OUTPUT_DIR,"tables/nseq_counts.csv")
+write.csv(file = filename_nseq, track_n_seqs)
+
+# seq length
+track_mergers_length_stats <- track_mergers_length_long %>% 
+                              group_by(samples) %>%
+                              summarize(mean = mean(length), 
+                                        sd = sd(length),
+                                        max = max(length), 
+                                        min = min(length))
+
+filename_seqlength_stats <- file.path(OUTPUT_DIR,"tables/seq_length_stats.csv")
+write.csv(file = filename_seqlength_stats, track_mergers_length_stats)
+
+###############################################################################
+### 20. Save R workspace
 ###############################################################################
 
 if (SAVE_WORKSPACE == T) {
