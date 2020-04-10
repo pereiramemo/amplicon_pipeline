@@ -96,7 +96,7 @@ if (METHOD == "NBCandEM") {
                          multithread = NSLOTS)
 
   print("Running EM ...")
-  TAXA <- addSpecies(taxtab = taxa, 
+  TAXA <- addSpecies(taxtab = TAXA, 
                      refFasta = REF_DB)
   
   TAXA <- TAXA %>%
