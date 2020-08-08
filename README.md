@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Amplicon Pipelines
 
 This repo includes pipelines for the preprocessing, clustering and annotation of 16S rRNA sequence data. 
@@ -18,3 +19,6 @@ Once these tools are installed, the paths to the executables have to be added to
 
 
 
+=======
+# amplicon_pipeline
+>>>>>>> bfc7fedbc00480d6b3caba4570103afe91749cec
