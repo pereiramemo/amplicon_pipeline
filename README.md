@@ -6,7 +6,7 @@ It additionally provides the scripts to glue the outputs of these pipelines.
 ## Requisites 
 [DADA2](https://benjjneb.github.io/dada2/index.html)
 
-Once these tools are installed, the paths to the executables have to be added to the scripts/config file.
+Once these tools are installed, the paths to the executables have to be added to the scripts/conf.sh file.
 
 
 
