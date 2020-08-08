@@ -5,10 +5,10 @@
 RUN_DIR="/bioinf/home/epereira/workspace/16S_analyses/lagunas_16S_analysis2/scripts"
 source "${RUN_DIR}"/config 
 
-PROJECT_NAME="test284"
-SUBSET="subset_61_84"
+PROJECT_NAME="maestria"
+SUBSET="subset_1_60"
 
-SWARM_ABUND="${LAGUNAS}/swarm_clustering/${SUBSET}/all_samples_final_abund.tbl"
+SWARM_ABUND="${LAGUNAS}/swarm_clustering/subset_1_60/all_samples_final_abund.tbl"
 TAXA_ANNOT="${LAGUNAS}/taxa_annot/${SUBSET}/${PROJECT_NAME}---ssu---otus.csv"
 CLSTR="${LAGUNAS}/taxa_annot/${SUBSET}/\
 ${PROJECT_NAME}---ssu---sequence_cluster_map---all_samples_final_representatives.clstr"
@@ -37,7 +37,7 @@ awk 'BEGIN {FS="\t"; OFS="\t"} {
     print $0}' > "${HEADER_TMP}"
 
 # cbind tables
-  paste "${HEADER_TMP}" "${TAXA_TMP}" > "${TAXA_ANNOT_REDU}"
+paste "${HEADER_TMP}" "${TAXA_TMP}" > "${TAXA_ANNOT_REDU}"
 
 # clean
 rm  "${HEADER_TMP}" "${TAXA_TMP}" 
@@ -103,8 +103,7 @@ cat <(cut -f4 "${SWARM_ABUND_REDU}" | sort | uniq) \
 ## 6 - cross tables
 ###############################################################################
 
-CLUST2ABUND2TAXA="${LAGUNAS}/taxa_annot/${SUBSET}/\
-${PROJECT_NAME}_${SUBSET}_clust2abund2taxa.tsv"
+CLUST2ABUND2TAXA="${LAGUNAS}/taxa_annot/${SUBSET}/${PROJECT_NAME}_clust2abund2taxa.tsv"
 
 # Define header
 echo -e "cluster\tsample\tabund\tseq_rep\ttaxonomy" > "${CLUST2ABUND2TAXA}"
@@ -118,9 +117,7 @@ sed "s/\ /_/" >> "${CLUST2ABUND2TAXA}"
 ## 7 - clean
 ###############################################################################
 
-rm "${SEQS2TAXA}" \
-   "${SWARM_ABUND_REDU}" \
-   "${SEQS2REP}"
+
 
 
 

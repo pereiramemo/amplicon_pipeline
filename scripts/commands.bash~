@@ -15,7 +15,7 @@ export WORKSPACE
 ## 2 - run preprocess
 ###############################################################################
 
-SAMPLES=$( ls "${WORKSPACE}"/Cecilia/3363Raw/*.fastq | \
+SAMPLES=$( ls "${WORKSPACE}"/Cecilia/3363Raw/* | \
            sed "s/_R[1,2].fastq//" | sort | uniq )
 
 parallel \
