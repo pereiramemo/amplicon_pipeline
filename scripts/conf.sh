@@ -1,6 +1,6 @@
 # dits
 REPOS="/home/epereira/workspace/repositories/"
-AMPLICON_PIPELINE_SCRIPTSV2="${REPOS}/amplicon_pipelines/scripts_v2/"
+AMPLICON_PIPELINE_SCRIPTSV2="${REPOS}/amplicon_pipelines/scripts/"
 RESOURCES="/home/bioinf/resources/"
 SILVA_DIR="${RESOURCES}/silva/silva_v138/"
 BLAST_DB_DIR="${RESOURCES}/silva/silva_v138/blastdb"
