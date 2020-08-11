@@ -28,7 +28,7 @@ primer_hits <- function(PRIMER, INPUT) {
 }
 
 ###############################################################################
-### 3. Fun to run cutadapt fom R
+### 3. Fun to run cutadapt from R
 ###############################################################################
 
 cutadapt <- "/home/epereira/.local/bin/cutadapt"
@@ -66,7 +66,7 @@ cutadapt_runner <- function(primer_fwd = PRIMER_FWD,
 }
 
 ###############################################################################
-### 3. Fun to run blastn fom R
+### 4. Fun to run blastn from R
 ###############################################################################
 
 # "2>/dev/null"))
