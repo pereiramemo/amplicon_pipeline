@@ -27,6 +27,16 @@ primer_hits <- function(PRIMER, INPUT) {
   return(sum(nhits > 0))
 }
 
+
+primer_hits_fasta <- function(PRIMER, INPUT) {
+  
+  nhits <- vcountPattern(pattern = PRIMER, 
+                         subject = sread(readFasta(INPUT)), 
+                         fixed = FALSE)
+  return(sum(nhits > 0))
+}
+
+
 ###############################################################################
 ### 3. Fun to run cutadapt from R
 ###############################################################################
@@ -41,7 +51,7 @@ cutadapt_runner <- function(primer_fwd = PRIMER_FWD,
                             output_r2 = OUTPUT_R2,
                             nslots = NSLOTS) {
 
-  primer_fwd_rc <- dada2::rc(primer_fwd) # rc is used instead of reverseComplement to
+  primer_fwd_rc <- dada2::rc(primer_fwd) # rc is used instead of reverseComplement
   primer_rev_rc <- dada2::rc(primer_rev) # to avoid converting data to DNAstring
   
   # Trim FWD and the reverse-complement of REV off of R1 (forward reads)
