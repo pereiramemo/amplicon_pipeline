@@ -4,16 +4,18 @@ All the pipelines are based on the Divisive Amplicon Denoising Algorithm impleme
 This tool is able to resolve Amplicon Sequence Variants (ASVs), differing by as little as one nucleotide. 
 ASVs provide biologically meaningful and consistent sequence labels, independently of reference databases. Also, ASVs provide a higher resolution of the taxonomic composition, compared to standard Operational Taxonomic Unit Clustering methods (Callahan 2017).
 
-This repository contains three pipelines:
-1. dada2_pipeline.R
-2. primers_removal.R
-3. taxa_annot.R
+This repository contains four pipelines:
+1. quality_check_plots.R
+2. dada2_pipeline.R
+3. primers_removal.R
+4. taxa_annot.R
 
 together with their corresponding wrap code:
 
-1. dada2_pipeline_runner.R
-2. primers_removal_runner.R
-3. taxa_annot_runner.R
+1. quality_check_plots_runner.bash
+1. dada2_pipeline_runner.bash
+2. primers_removal_runner.bash
+3. taxa_annot_runner.bash
 
 This way, all the pipelines can be executed from the command line. 
 The pipelines customized the original code from the [DADA2 tutorial](https://benjjneb.github.io/dada2/tutorial.html).
